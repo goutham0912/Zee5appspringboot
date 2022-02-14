@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.zee.zee5app.dto.Movies;
 import com.zee.zee5app.dto.Series;
 import com.zee.zee5app.exception.NameNotFound;
+import com.zee.zee5app.exception.RecordExists;
 import com.zee.zee5app.repository.SeriesRepository;
 import com.zee.zee5app.service.Series_Service1;
 @Service
@@ -16,17 +17,19 @@ public class SeriesServiceImpl implements Series_Service1 {
 	@Autowired
  SeriesRepository repo;
 	@Override
-	public String addSeries(Series s) {
+	public Series addSeries(Series s) throws RecordExists {
 		// TODO Auto-generated method stub
+		if(repo.existsByName(s.getName()))
+			throw new RecordExists("Series already exists");
 		Series s1=repo.save(s);
 		if(s1!=null)
-			return "Success";
+			return s1;
 			else
-				return "Failure";
+				return null;
 	}
 
 	@Override
-	public String deleteSeries(String id) throws NameNotFound {
+	public String deleteSeries(Long id) throws NameNotFound {
 		// TODO Auto-generated method stub
 		Optional<Series> optional=this.getSeriesdetails(id);
 		if(optional.isEmpty())
@@ -39,7 +42,7 @@ public class SeriesServiceImpl implements Series_Service1 {
 	}
 
 	@Override
-	public Optional<Series> getSeriesdetails(String id) throws NameNotFound {
+	public Optional<Series> getSeriesdetails(Long id) throws NameNotFound {
 		// TODO Auto-generated method stub
 		return repo.findById(id);
 	}
@@ -52,7 +55,7 @@ public class SeriesServiceImpl implements Series_Service1 {
 	}
 
 	@Override
-	public String updateseriesdetails(String id, Series s) throws NameNotFound {
+	public String updateseriesdetails(Long id, Series s) throws NameNotFound {
 		// TODO Auto-generated method stub
 		return null;
 	}

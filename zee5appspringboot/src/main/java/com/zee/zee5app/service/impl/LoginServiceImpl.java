@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.zee.zee5app.dto.Erole;
 import com.zee.zee5app.dto.Login;
-import com.zee.zee5app.dto.ROLE;
+import com.zee.zee5app.dto.Role;
 import com.zee.zee5app.repository.LoginRepository;
 import com.zee.zee5app.service.LoginService;
 @Service
@@ -17,6 +18,7 @@ LoginRepository repo;
 	public String addCredentials(Login login) {
 		// TODO Auto-generated method stub
 		Login l=repo.save(login);
+		System.out.println(l);
 		if(l!=null)
 			return "Success";
 		else
@@ -42,7 +44,7 @@ LoginRepository repo;
 	}
 
 	@Override
-	public String changerole(String username, ROLE role) {
+	public String changerole(String username, Erole role) {
 		// TODO Auto-generated method stub
 		return null;
 	}

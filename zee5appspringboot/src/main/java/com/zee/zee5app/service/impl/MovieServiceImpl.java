@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.zee.zee5app.dto.Movies;
 import com.zee.zee5app.exception.LocationNotFound;
 import com.zee.zee5app.exception.NameNotFound;
+import com.zee.zee5app.exception.RecordExists;
 import com.zee.zee5app.repository.MovieRepository;
 import com.zee.zee5app.service.Movie_Service1;
 @Service
@@ -18,17 +19,19 @@ public class MovieServiceImpl implements Movie_Service1 {
 	@Autowired
 	MovieRepository repo;
 	@Override
-	public String addMovie(Movies m) {
+	public Movies addMovie(Movies m) throws RecordExists {
 		// TODO Auto-generated method stub
+		if(repo.existsByMovieName(m.getMovieName()))
+			throw new NullPointerException("Movie already exists");
 		Movies movies= repo.save(m);
 		if(movies!=null)
-			return "Success";
+			return movies;
 		else
-			return "fail";
+			return null;
 	}
 
 	@Override
-	public String deleteMovie(String id) throws NameNotFound, LocationNotFound {
+	public String deleteMovie(Long id) throws NameNotFound, LocationNotFound {
 		// TODO Auto-generated method stub
 		Optional<Movies> optional=this.getMoviedetails(id);
 		if(optional.isEmpty())
@@ -41,7 +44,7 @@ public class MovieServiceImpl implements Movie_Service1 {
 	}
 
 	@Override
-	public Optional<Movies> getMoviedetails(String id) throws NameNotFound, LocationNotFound {
+	public Optional<Movies> getMoviedetails(Long id) throws NameNotFound, LocationNotFound {
 		// TODO Auto-generated method stub
 		return repo.findById(id);
 	}
@@ -60,7 +63,7 @@ public class MovieServiceImpl implements Movie_Service1 {
 	}
 
 	@Override
-	public String updatemoviedetails(String id, Movies s) throws NameNotFound, LocationNotFound {
+	public String updatemoviedetails(Long id, Movies s) throws NameNotFound, LocationNotFound {
 		// TODO Auto-generated method stub
 		return null;
 	}

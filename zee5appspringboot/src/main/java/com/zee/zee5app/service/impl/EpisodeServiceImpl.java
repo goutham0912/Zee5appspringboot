@@ -10,6 +10,7 @@ import com.zee.zee5app.dto.Episodes;
 import com.zee.zee5app.dto.Movies;
 import com.zee.zee5app.exception.LocationNotFound;
 import com.zee.zee5app.exception.NameNotFound;
+import com.zee.zee5app.exception.RecordExists;
 import com.zee.zee5app.repository.EpisodeRepository;
 import com.zee.zee5app.service.EpisodeService;
 @Service
@@ -17,17 +18,18 @@ public class EpisodeServiceImpl implements EpisodeService {
 	@Autowired
 EpisodeRepository repo;
 	@Override
-	public String addepisode(Episodes m) {
+	public Episodes addepisode(Episodes m) {
 		// TODO Auto-generated method stub
+	
 		Episodes episodes=repo.save(m);
 		if(episodes!=null)
-			return "Success";
+			return episodes;
 		else
-			return "Failed";
+			return null;
 	}
 
 	@Override
-	public String deletepisode(String id) throws NameNotFound, LocationNotFound {
+	public String deletepisode(Long id) throws NameNotFound, LocationNotFound {
 		// TODO Auto-generated method stub
 		Optional<Episodes> optional=this.getEpisodesdetails(id);
 		if(optional.isEmpty())
@@ -40,7 +42,7 @@ EpisodeRepository repo;
 	}
 
 	@Override
-	public Optional<Episodes> getEpisodesdetails(String id) throws NameNotFound, LocationNotFound {
+	public Optional<Episodes> getEpisodesdetails(Long id) throws NameNotFound, LocationNotFound {
 		// TODO Auto-generated method stub
 		return repo.findById(id);
 	}
@@ -54,7 +56,7 @@ EpisodeRepository repo;
 	}
 
 	@Override
-	public Episodes update_episodedetails(String id, Episodes s) throws NameNotFound, LocationNotFound {
+	public Episodes update_episodedetails(Long id, Episodes s) throws NameNotFound, LocationNotFound {
 		// TODO Auto-generated method stub
 		return null;
 	}

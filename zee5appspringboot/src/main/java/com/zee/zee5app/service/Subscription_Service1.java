@@ -8,9 +8,9 @@ import com.zee.zee5app.dto.Subscriptions;
 import com.zee.zee5app.exception.NameNotFound;
 
 public interface Subscription_Service1 {
-	public String addSubscription(Subscriptions s);
-	public String deleteSubscription(String id) throws NameNotFound;
-	public Optional<Subscriptions> getSubscription(String id) throws NameNotFound;
+	public Subscriptions addSubscription(Subscriptions s);
+	public String deleteSubscription(Long id) throws NameNotFound;
+	public Optional<Subscriptions> getSubscription(Long id) throws NameNotFound;
 	public Optional<List<Subscriptions>> getallSubscription();
-	public String updatesubscription(String id,Subscriptions s) throws NameNotFound;
+	public String updatesubscription(Long id,Subscriptions s) throws NameNotFound;
 }

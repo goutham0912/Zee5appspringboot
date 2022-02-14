@@ -5,11 +5,18 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.zee.zee5app.dto.UserBankDetails;
 import com.zee.zee5app.exception.InvalidAmountException;
 
@@ -25,29 +32,51 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class Subscriptions {
 	@Id
 	@Column(name="id")
-	private String id;
+	 @GeneratedValue(strategy = GenerationType.AUTO)
+	 private Long id;
 	@NotNull
-	private Date dateofpurchase;
+	private Date dateOfPurchase;
 	@NotNull
-	private Date expirydate;
+	private Date expiryDate;
 	@NotNull
-	private int subscription_cost;
-	private String paymentmode;
+	private int subscriptionCost;
+	private String paymentMode;
 	@NotBlank //it used for string
 	private String status;
 	@NotBlank
 	private String type;
 	
 	@NotBlank
-	private String autorenewal;
+	private String autoRenewal;
+//	@NotBlank
+//	private String regId;
 	@NotBlank
-	private String regid;
-	@NotBlank
-	private String packcountry;
+	private String packCountry;
+	
+	@OneToOne
+	@JoinColumn(name="regId")
+	@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+	@JsonProperty(access=Access.WRITE_ONLY)
+	private User register;
+
+	public Subscriptions(@NotNull Date dateOfPurchase, @NotNull Date expiryDate, @NotNull int subscriptionCost,
+			String paymentMode, @NotBlank String status, @NotBlank String type, @NotBlank String autoRenewal,
+			@NotBlank String packCountry, User register) {
+		super();
+		this.dateOfPurchase = dateOfPurchase;
+		this.expiryDate = expiryDate;
+		this.subscriptionCost = subscriptionCost;
+		this.paymentMode = paymentMode;
+		this.status = status;
+		this.type = type;
+		this.autoRenewal = autoRenewal;
+		this.packCountry = packCountry;
+		this.register = register;
+	}
 	
 	
 //	public void setAmount(int amount) throws InvalidAmountException {
@@ -64,17 +93,5 @@ public class Subscriptions {
 //		
 //	}
 //
-//	public Subscriptions(String id, String dateofpurchase, String expirydate, int subscription_cost,
-//			String paymentmode, String status, String type, String autorenewal, String regid) {
-//		super();
-//		this.id = id;
-//		this.dateofpurchase = dateofpurchase;
-//		this.expirydate = expirydate;
-//		this.subscription_cost = subscription_cost;
-//		this.paymentmode = paymentmode;
-//		this.status = status;
-//		this.type = type;
-//		this.autorenewal = autorenewal;
-//		this.regid = regid;
-//	}
+
 }

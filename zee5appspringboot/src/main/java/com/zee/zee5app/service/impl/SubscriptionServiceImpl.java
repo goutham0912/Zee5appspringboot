@@ -17,17 +17,17 @@ public class SubscriptionServiceImpl implements Subscription_Service1 {
 	@Autowired
 SubscriptionRepository repo;
 	@Override
-	public String addSubscription(Subscriptions s) {
+	public Subscriptions addSubscription(Subscriptions s) {
 		// TODO Auto-generated method stub
 		Subscriptions subscriptions= repo.save(s);
 		if(subscriptions!=null)
-			return "Success";
+			return subscriptions;
 		else
-			return "fail";
+			return null;
 	}
 
 	@Override
-	public String deleteSubscription(String id) throws NameNotFound {
+	public String deleteSubscription(Long id) throws NameNotFound {
 		// TODO Auto-generated method stub
 		Optional<Subscriptions> optional=this.getSubscription(id);
 		if(optional.isEmpty())
@@ -40,7 +40,7 @@ SubscriptionRepository repo;
 	}
 
 	@Override
-	public Optional<Subscriptions> getSubscription(String id) throws NameNotFound {
+	public Optional<Subscriptions> getSubscription(Long id) throws NameNotFound {
 		// TODO Auto-generated method stub
 		return repo.findById(id);
 	}
@@ -53,7 +53,7 @@ SubscriptionRepository repo;
 	}
 
 	@Override
-	public String updatesubscription(String id, Subscriptions s) throws NameNotFound {
+	public String updatesubscription(Long id, Subscriptions s) throws NameNotFound {
 		// TODO Auto-generated method stub
 		return null;
 	}

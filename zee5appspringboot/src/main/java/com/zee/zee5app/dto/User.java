@@ -2,20 +2,36 @@ package com.zee.zee5app.dto;
 
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.ManyToAny;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.zee.zee5app.exception.InvalidIdLengthException;
 import com.zee.zee5app.exception.InvalidNameException;
 import com.zee.zee5app.exception.InvalidPasswordException;
+import com.zee.zee5app.utils.CustomListSerialiser;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,10 +45,10 @@ import lombok.ToString;
 @Setter
 @Getter
 @Entity //it is used for creating the orm
-@Table(name="reg")
+@Table(name="reg",uniqueConstraints = { @UniqueConstraint(columnNames = "username"),@UniqueConstraint(columnNames = "email")})
 @NoArgsConstructor
-@AllArgsConstructor
-public class Register implements Comparable<Register>
+//@AllArgsConstructor
+public class User implements Comparable<User>
 {
 	
 
@@ -42,22 +58,51 @@ public class Register implements Comparable<Register>
 
  @Id //to make it as primary key
  @Column(name="regid") //to set column name
-//to override set method
- private String id;
+ @GeneratedValue(strategy = GenerationType.AUTO)
+ private Long id;
+ 
+ @NotBlank
+ @Size(max = 20)
+ private String username;
+ 
+ 
 @Size(max=50)
 @NotBlank
  private String firstName;
+
+
 @Size(max=50)
 @NotBlank
  private String lastName;
+
+
 @Size(max=50)
 @Email
  private String email;
+
+
 @Size(max=100)
 @NotBlank
  private String password;
-@NotNull
- private BigDecimal contactno;
+
+
+//@NotNull
+ private BigDecimal contactNo;
+
+
+@OneToOne(mappedBy = "register",cascade = CascadeType.ALL)
+private Subscriptions subscriptions;
+//@JsonIgnore
+//@JsonSerialize(using=CustomListSerialiser.class)
+
+
+@OneToOne(mappedBy = "loginRegister",cascade = CascadeType.ALL)
+private Login login;
+
+
+@ManyToMany(fetch = FetchType.LAZY)
+@JoinTable(name="user_roles",joinColumns=@JoinColumn(name="regId"),inverseJoinColumns = @JoinColumn(name="roleId"))
+private Set<Role> roles=new HashSet<Role>();
 // public Register()
 // {
 //	 //Explicit default constructor
@@ -102,7 +147,7 @@ public boolean equals(Object obj) {
 		return false;
 	if (getClass() != obj.getClass())
 		return false;
-	Register other = (Register) obj;
+	User other = (User) obj;
 	return Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName)
 			&& Objects.equals(id, other.id) && Objects.equals(lastName, other.lastName)
 			&& Objects.equals(password, other.password);
@@ -120,7 +165,7 @@ public int hashCode() {
 //}
 
 @Override
-public int compareTo(Register o) {
+public int compareTo(User o) {
 //	// TODO Auto-generated method stub
 //	//used for sorting 
 //	//Descending order
@@ -138,6 +183,16 @@ public void setEmail(String email) {
 }
 
 public void setContactno(BigDecimal contactno) {
-	this.contactno = contactno;
+	this.contactNo = contactno;
+}
+
+public User(String username,String email,String password,String firstName,String lastName)
+
+{
+	this.username=username;
+	this.email=email;
+	this.password=password;
+	this.firstName=firstName;
+	this.lastName=lastName;
 }
 }

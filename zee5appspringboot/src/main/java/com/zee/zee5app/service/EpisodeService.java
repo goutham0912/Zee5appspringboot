@@ -8,10 +8,10 @@ import com.zee.zee5app.exception.LocationNotFound;
 import com.zee.zee5app.exception.NameNotFound;
 
 public interface EpisodeService {
-	public String addepisode(Episodes m);
-	public String deletepisode(String id) throws NameNotFound, LocationNotFound;
-	public Optional<Episodes> getEpisodesdetails(String name) throws NameNotFound, LocationNotFound;
+	public Episodes addepisode(Episodes m);
+	public String deletepisode(Long id) throws NameNotFound, LocationNotFound;
+	public Optional<Episodes> getEpisodesdetails(Long id) throws NameNotFound, LocationNotFound;
 //	public String[] getEpisodesCast(String episodename) throws NameNotFound, LocationNotFound;
 	public Optional<List<Episodes>> getallEpisodeDetails();
-	public Episodes update_episodedetails(String id,Episodes s) throws NameNotFound, LocationNotFound;
+	public Episodes update_episodedetails(Long id,Episodes s) throws NameNotFound, LocationNotFound;
 }

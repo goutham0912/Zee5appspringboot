@@ -6,7 +6,10 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
@@ -18,17 +21,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name="movies",uniqueConstraints = @UniqueConstraint(columnNames = "moviename"))
 public class Movies {
 	@Id
 	@Column(name="id")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	@NotBlank
-	private String moviename;
+	private String movieName;
 	@Max(value = 70)
-	private int age_limit;
+	private int ageLimit;
 	@NotBlank
 	private String cast;
 	@NotBlank
@@ -52,10 +56,10 @@ public class Movies {
 //		this.releasedate = releasedate;
 //		this.language = language;
 //	}
-	@NotBlank
+	@NotBlank  //large object binaries
 	private String trailer;
 	@NotNull
-	private Date releasedate;
+	private Date releaseDate;
 	@NotBlank
 	private String  language;
 	
@@ -64,5 +68,24 @@ public class Movies {
 //		private List<String> allowed_locations;
 	@NotBlank
 	private String category;
+
+
+
+	public Movies(String movieName, int ageLimit, String cast,  String genre,
+			 BigDecimal length,  String trailer,  Date releaseDate,  String language,
+			 String category) {
+		//super();
+		this.movieName = movieName;
+		this.ageLimit = ageLimit;
+		this.cast = cast;
+		this.genre = genre;
+		this.length = length;
+		this.trailer = trailer;
+		this.releaseDate = releaseDate;
+		this.language = language;
+		this.category = category;
+	}
+	
+	
 
 }
